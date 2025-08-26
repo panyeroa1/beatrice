@@ -48,7 +48,7 @@ function AltairComponent() {
       generationConfig: {
         responseModalities: "audio",
         speechConfig: {
-          voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } },
+          voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } },
         },
       },
       // ***** THE HEART OF BEATRICE - EMBEDDED *****
