@@ -147,4 +147,4 @@ It went from feeling like a chore to feeling like... MAGIC. Seriously, I'm still
   return <div className="vega-embed" ref={embedRef} />;
 }
 
-export const Altair = memo(AltairComponent);
+export const Altair = mem0(AltairComponent);
