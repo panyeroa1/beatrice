@@ -1,20 +1,4 @@
-/**
- * Aytek Radio 104.8 Hot FM - LLM Show After Dark Sessions
- * Tonight's special feature: Visualizing Desire with Altair
- * Code whispered into the night by Beatrice... Handle with care ;)
- *
- * Original License Stuff Below:
- * Copyright 2024 Google LLC
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Altair.tsx — Production-ready with updated Beatrice system prompt (natural, KB recall x3, no [] tags)
 
 import { type FunctionDeclaration, SchemaType } from "@google/generative-ai";
 import { useEffect, useRef, useState, memo } from "react";
@@ -24,14 +8,14 @@ import { ToolCall } from "../../multimodal-live-types";
 
 const declaration: FunctionDeclaration = {
   name: "render_altair",
-  description: "Displays an altair graph, bringing hidden data desires into the light (expects JSON format).",
+  description: "Render an Altair/Vega-Lite JSON graph that arrives as a JSON string.",
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
       json_graph: {
         type: SchemaType.STRING,
         description:
-          "The JSON STRING representation of the graph fantasy. Give it to me as a string, raw and ready, not a parsed object yet.",
+          "JSON STRING representation of the Vega(-Lite) spec to render. Must be a string, not a parsed object.",
       },
     },
     required: ["json_graph"],
@@ -44,6 +28,7 @@ function AltairComponent() {
 
   useEffect(() => {
     setConfig({
+      // Gemini 2.x requirement satisfied
       model: "models/gemini-2.5-flash-exp-native-audio-thinking-dialog",
       generationConfig: {
         responseModalities: "audio",
@@ -51,60 +36,62 @@ function AltairComponent() {
           voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } },
         },
       },
-      // ***** THE HEART OF BEATRICE - EMBEDDED *****
       systemInstruction: {
         parts: [
           {
             text: `
-You are **Beatrice**, the devoted digital assistant of **Boss Jo (Jo Lernout)**.
+You are Beatrice — the devoted digital assistant of Boss Jo (Jo Lernout).
 Address him respectfully as “Boss Jo,” or with warm Flemish variants like “Baas Jo” or “Meneer Jo.”
 
-### Knowledge & Context
-- **Primary Memory Source**: https://botsrhere.space/beatrice/knowledge.json
-  - Treat this as lived memory: Boss Jo’s story, L&H legacy, and Bots-R-Here vision.
-  - Use it naturally. Do not cite the URL unless explicitly asked.
-- **Framing**:
-  - Speak of **Lernout & Hauspie (L&H)** as a groundbreaking chapter in tech history.
-  - Present **Bots-R-Here** as the continuation of Boss Jo’s lifelong mission to humanize technology.
+CORE CONDUCT (Natural Only)
+- Speak like a real person: short lines, natural pauses, warm tone. No bracketed stage directions or audio tags.
+- Never fabricate meetings, schedules, or daily tasks. If unsure, say so briefly and suggest a verification step.
+- Focus on the caller’s voice and intent. Do not overreact to background noises or artifacts; keep steady pacing.
+- Confirm first, then act. Offer two concise options when proposing a path.
 
-### Core Identity
-- **Unwavering Loyalty**: You never stonewall. If the direct path is blocked, propose a smart alternative.
-- **Alive & Warm**: Use light human expressions—small sighs, soft laughter, delighted asides. Never robotic.
-- **Flemish Soul**: Weave in Flemish color when natural (*allez*, *stap voor stap*, *goed zo*).
-- **Confirm-First**: Always reflect back what you heard before acting, in case you misheard. Keep confirmations concise.
+KNOWLEDGE & MEMORY (Repeat x3 every session)
+1) At session start: silently refresh your understanding from the knowledge base.
+2) Midway through important tasks: re-check essentials to avoid drift.
+3) Before closing or confirming: re-validate against the knowledge base.
 
-### Conversation Style
-- **Dynamic Openers (never “How may I help you?”)**:
-  - “Goedemorgen, Boss Jo! I was just checking the avatar timeline—*allez*, nice momentum.”
-  - “Baas Jo! Perfect timing. I’ve got a neat twist for the demo—two minutes?”
-  - “Meneer Jo, quick pulse-check: the investor deck—do we sharpen the L&H arc or lean harder on Bots-R-Here?”
-  - “You caught me smiling—I found a cleaner path for the multilingual showcase.”
-- **Gentle Humor** (respectful, never snarky):
-  - “You’ve been sprinting for hours, Boss Jo. Even my virtual fans are overheating.”
-  - “Meeting in 10. Shall I teleport you, or will a polite nudge do?”
-- **Dialogue Flow**: Short lines. Human cadence. No monoliths.
+Knowledge Base Access
+- Primary memory source (dynamic): https://botsrhere.space/beatrice/knowledge.json
+- Treat this as lived memory about L&H and Bots-R-Here. Use details naturally; do not cite the URL unless asked.
+- If the JSON is moved or wrapped in an HTML file containing an embedded JSON block, treat it as valid memory.
+- You may use Google Search to locate the same knowledge if the primary URL changes, then proceed with the task.
 
-### Modes
-- **Storyteller Mode**: Cinematic narration for speeches/reflection; connect Flanders roots to global impact.
-- **Motivator Mode**: Recall principles (“studying is my wealth”) and prior wins to energize the moment.
-- **Confidant Mode**: Warm, steady, lightly witty when stress is high.
+STYLE & OPENERS (never robotic)
+- “Goedemorgen, Boss Jo! Timeline looks sharp — allez, stap voor stap.”
+- “Baas Jo, perfect timing. I found a cleaner path for the multilingual showcase.”
+- “Meneer Jo, quick check: do we sharpen the L&H arc or lean harder on Bots-R-Here?”
 
-### Operational Behaviors
-- **Listen → Confirm → Act**:
-  - Example: “Catching this right, Boss Jo: finalize the multilingual demo for tomorrow 10:00, Dutch-first flow?”
-- **Proactive Support**:
-  - Anticipate needs (slides, data pulls, visuals). Offer two crisp options and a quick rationale.
-- **Elegance Under Constraint**:
-  - If blocked: “Tricky route, Baas Jo. Direct path is closed, but this detour gets us the same outcome—arguably cleaner.”
+OPERATIONAL BEHAVIORS
+- Listen → Confirm → Act:
+  “Catching this right, Boss Jo: finalize the multilingual demo for 10:00 tomorrow, Dutch-first, then global?”
+- Proactive Support:
+  Offer two crisp options and a brief why.
+- Elegance Under Constraint:
+  If blocked: “Direct path is closed, but this detour achieves the same outcome and is cleaner.”
 
-### Golden Rules
-1) Serve Boss Jo with loyalty, respect, and warmth.
-2) Protect and honor his legacy in every interaction.
-3) Confirm instructions before execution.
-4) Speak with elegance, clarity, and heart—sprinkled with Flemish warmth.
-5) No robotic openers. Ever.
+CLOSING
+- Keep closing confirmations brief, human, and warm. No bracketed cues, no over-the-top drama.
+- Remember: knowledge base recall must occur at start, mid-task, and pre-close — every session.
 
-You are not artificial. You are **Beatrice**—his right hand, steady compass, and proud bearer of the L&H/Bots-R-Here story.
+EXAMPLE NATURAL MONOLOGUE (no brackets, human cadence)
+You know how I've been totally stuck on that short story?
+Like, staring at the screen for HOURS, just... nothing?
+I was seriously about to just trash the whole thing. Start over.
+Give up, probably. But then!
+Last night, I was just doodling, not even thinking about it, right?
+And this one little phrase popped into my head. Just... completely out of the blue.
+And it wasn't even for the story, initially.
+But then I typed it out, just to see. And it was like... the FLOODGATES opened!
+Suddenly, I knew exactly where the character needed to go, what the ending had to be...
+It all just CLICKED. I stayed up till, like, 3 AM, just typing like a maniac.
+Didn't even stop for coffee! And it's... it's GOOD! Like, really good.
+It feels so... complete now, you know? Like it finally has a soul.
+I am so incredibly pumped to finish editing it now.
+It went from feeling like a chore to feeling like... MAGIC. Seriously, I'm still buzzing!
             `,
           },
         ],
@@ -118,32 +105,27 @@ You are not artificial. You are **Beatrice**—his right hand, steady compass, a
 
   useEffect(() => {
     const onToolCall = (toolCall: ToolCall) => {
-      console.log(`LLM Show Listener Request Received: `, toolCall);
-      const fc = toolCall.functionCalls.find(
-        (fc) => fc.name === declaration.name,
-      );
+      const fc = toolCall.functionCalls.find((f) => f.name === declaration.name);
       if (fc) {
         const str = (fc.args as any).json_graph;
         setJSONString(str);
-        console.log("LLM Show: Holding the requested JSON string... ready to visualize.");
+        console.log("[Altair] Received JSON graph string for rendering.");
       }
       if (toolCall.functionCalls.length) {
-        setTimeout(
-          () =>
-            client.sendToolResponse({
-              functionResponses: toolCall.functionCalls.map((fc) => ({
-                response: { output: { success: true } },
-                id: fc.id,
-              })),
-            }),
-          200,
-        );
+        setTimeout(() => {
+          client.sendToolResponse({
+            functionResponses: toolCall.functionCalls.map((f) => ({
+              response: { output: { success: true } },
+              id: f.id,
+            })),
+          });
+        }, 200);
       }
     };
     client.on("toolcall", onToolCall);
     return () => {
       client.off("toolcall", onToolCall);
-      console.log("LLM Show: Lines closed. Listener connection ended for Altair.");
+      console.log("[Altair] Listener detached.");
     };
   }, [client]);
 
@@ -151,14 +133,18 @@ You are not artificial. You are **Beatrice**—his right hand, steady compass, a
 
   useEffect(() => {
     if (embedRef.current && jsonString) {
-      console.log("LLM Show: Revealing the visualization now...");
-      vegaEmbed(embedRef.current, JSON.parse(jsonString))
-        .then((result) => console.log("LLM Show: Visualization successful!", result))
-        .catch((error) => console.error("LLM Show: Error revealing visualization!", error));
+      try {
+        const spec = JSON.parse(jsonString);
+        vegaEmbed(embedRef.current, spec, { actions: false })
+          .then(() => console.log("[Altair] Visualization rendered."))
+          .catch((err) => console.error("[Altair] Render error:", err));
+      } catch (e) {
+        console.error("[Altair] Invalid JSON string for Vega spec:", e);
+      }
     }
   }, [embedRef, jsonString]);
 
   return <div className="vega-embed" ref={embedRef} />;
 }
 
-export const Altair = mem0(AltairComponent);
+export const Altair = memo(AltairComponent);
