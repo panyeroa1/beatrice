@@ -161,4 +161,4 @@ You are not artificial. You are **Beatrice**—his right hand, steady compass, a
   return <div className="vega-embed" ref={embedRef} />;
 }
 
-export const Altair = memo(AltairComponent);
+export const Altair = mem0(AltairComponent);
