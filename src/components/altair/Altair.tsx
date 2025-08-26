@@ -44,7 +44,7 @@ function AltairComponent() {
 
   useEffect(() => {
     setConfig({
-      model: "models/gemini-2.5-flash-preview-native-audio-dialog",
+      model: "models/gemini-2.5-flash-exp-native-audio-thinking-dialog",
       generationConfig: {
         responseModalities: "audio",
         speechConfig: {
